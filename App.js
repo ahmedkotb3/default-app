@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
+import { TailwindProvider } from "tailwindcss-react-native";
+import Test from "./components/test";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./screens/HomeScreen";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
@@ -20,20 +25,34 @@ export default function App() {
     });
     console.log(courseGoals);
   }
+
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View style={styles.appContainer}>
-      <GoalInput ongoalAdd={addGoalHandler} />
-      <View style={styles.goalList}>
-        <FlatList
-          data={courseGoals}
-          renderItem={(itemData) => {
-            return (
-              <GoalItem itemData={itemData} ongoalDelete={deleteGoalHandler} />
-            );
-          }}
-        ></FlatList>
-      </View>
-    </View>
+    <NavigationContainer>
+      <TailwindProvider>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={HomeScreen} />
+        </Stack.Navigator>
+        <View style={styles.appContainer}>
+          <GoalInput ongoalAdd={addGoalHandler} />
+          <View style={styles.goalList}>
+            <FlatList
+              data={courseGoals}
+              renderItem={(itemData) => {
+                return (
+                  <GoalItem
+                    itemData={itemData}
+                    ongoalDelete={deleteGoalHandler}
+                  />
+                );
+              }}
+            ></FlatList>
+          </View>
+          <Test />
+        </View>
+      </TailwindProvider>
+    </NavigationContainer>
   );
 }
 
